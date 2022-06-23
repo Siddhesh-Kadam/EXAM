@@ -1,0 +1,91 @@
+<html>
+<body>
+	<!-- ****** MY CODE IS WORKING !!  **********-->
+	<label>Book Id: </label>
+	<input type="number" id="txt_bookid">
+
+	<span id="sp_status">Message</span><br>
+	<br>
+
+	<label>Book name: </label>
+	<input type="text" id="txt_bookname"><br>
+	<br>
+
+	<label>Price:</label>
+	<input type="number" id="txt_price"><br>
+	<br>
+
+	<button type="button" id="btn_addbook">Add a book</button><br>
+	<br>
+
+	<span id="sp_showall">All books shown here</span>
+
+</body>
+
+<!-- Not included jquery file in my submission because SIR ASKED TO SUBMIT ONLY 2 files, 
+	html and js file -->
+<script src="jquery-3.5.1.min.js"></script>  
+<script>//our script will come here 
+
+// MY CODE IS WORKING!!!
+
+$(document).ready(function() {
+
+	console.log("no more sins");
+
+	$("#btn_addbook").click(() => { 
+	 
+		let input = {
+			bookid:$('#txt_bookid').val(),
+			bookname:$('#txt_bookname').val(),
+			price:$('#txt_price').val()
+		};
+
+		$.ajax({
+			data: input,
+			url: "addbook",
+			type: "get",
+            dataType: "json",            			
+            success: (data) => {
+            	if (data.status) {
+            		$('#sp_status').html("Book added.");
+            	} else {
+            		$('#sp_status').html("Book was NOT added. Book ID already exists.");
+            	}
+            },
+            error: (e) => {
+                alert('we have trouble ' + JSON.stringify(e));
+            }
+		});
+
+		$.ajax({
+			data: {},
+			url: "showall",
+			type: "get",
+            dataType: "json",		
+            success: (data) => {
+            	if (data.status) {
+            		let listofbooks = "";
+            		for (let i = 0; i < data.books.length; i++) {
+            			listofbooks += "<br>" +
+										"Book id: " + data.books[i].bookid + "<br>" +
+										"Book name: " + data.books[i].bookname + "<br>" +
+										"Price: " + data.books[i].price + "<br><br>";
+	            	}
+	            	$('#sp_showall').html(listofbooks);
+            	} else {
+            		$('#sp_showall').html("No records found in db");
+            	}
+            	
+            },
+            error: (e) => {
+                alert('we have trouble ' + JSON.stringify(e));
+            }
+		});
+	});
+});
+
+// MYCODE IS WORKING
+
+</script>
+</html>
